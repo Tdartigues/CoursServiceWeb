@@ -2,14 +2,14 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const books = require('./books.json')
+const books = require('../BDD.json')
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
 app.listen(port, () => {
-  console.log('Example app listening at http://localhost:3000/%27)
+  console.log('Example app listening at http://localhost:3000/%27')
 })
 
 app.get('/books', (req, res) => {
