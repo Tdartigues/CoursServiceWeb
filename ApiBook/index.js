@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const fs = require('fs')
+const { v4: uuidv4 } = require('uuid')
 
 app.use(express.json())
 
@@ -10,7 +11,7 @@ const getBooks = () => {
     return require('../Books.json')
 }
 
-const findBook = (id) => getBooks().find(m => m.id == id)
+const findBook = (id) => getBooks().find(m => m.id === id)
 
 app.listen(port, () => {
   console.log('Example app listening at http://localhost:3000/')
@@ -50,20 +51,17 @@ app.put('/books/:id', (req, res) => {
 app.post('/books', (req, res) => {
     let books = getBooks()
     let newBook = req.body
-    if(books.find(b => b.id == newBook.id)){
-        res.status(400).end()
-    } else {
-        books.push(newBook)
-        fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
-        res.status(201).send(newBook)
-    }
+    newBook.id = uuidv4()
+    books.push(newBook)
+    fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
+    res.status(201).send(newBook)
 })
 
 app.delete('/books/:id', (req, res) => {
     let books = getBooks()
     let bookID = req.params.id
-    if(books.find(b => b.id == bookID)){
-        const nBooks = books.filter(b => b.id != bookID)
+    if(books.find(b => b.id === bookID)){
+        const nBooks = books.filter(b => b.id !== bookID)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(nBooks))
         res.status(204).end()
     } else {
