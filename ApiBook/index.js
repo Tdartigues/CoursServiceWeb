@@ -10,7 +10,7 @@ const getBooks = () => require('../Books.json')
 const findBook = (id) => getBooks().find(m => m.id == id)
 
 app.listen(port, () => {
-  console.log('Example app listening at http://localhost:3000/')
+  console.log('Example app listening at http://localhost:3000/%27')
 })
 
 app.get('/books', (req, res) => {
