@@ -13,7 +13,7 @@ const getBooks = () => {
 const findBook = (id) => getBooks().find(m => m.id == id)
 
 app.listen(port, () => {
-  console.log('Example app listening at http://localhost:3000/%27')
+  console.log('Example app listening at http://localhost:3000/')
 })
 
 app.get('/books', (req, res) => {
@@ -21,9 +21,15 @@ app.get('/books', (req, res) => {
 })
 
 app.get('/books/:id', (req, res) =>{
-   const id = parseInt(req.params.id)
-   const book = getBooks().find(book => book.id === id)
-   res.status(200).json(book)
+    const id = parseInt(req.params.id)
+    const book = getBooks().find(book => book.id === id)
+    if(book){
+        res.status(200).json(book)
+    }
+    else {
+        res.status(404).end()
+    }
+
 })
 
 app.put('/books/:id', (req, res) => {

@@ -16,14 +16,20 @@ app.listen(port, () => {
     console.log('Example app listening at http://localhost:3001/')
 })
 
-app.get('/magazines', (req, res) => {
+app.get('/magazines', (req, res) =>
     res.status(200).json(getMagazines())
-})
+)
 
 app.get('/magazines/:id', (req, res) =>{
     const id = parseInt(req.params.id)
-    const magazine = getMagazines().find(magazine => magazine.id === id)
-    res.status(200).json(magazine)
+    const magazine = getMagazines().find(magazine => magazine.id == id)
+    if(magazine) {
+        res.status(200).json(magazine)
+    }
+    else {
+        res.status(404).end()
+    }
+
 })
 
 app.put('/magazines/:id', (req, res) => {
@@ -56,8 +62,6 @@ app.post('/magazines', (req, res) => {
 app.delete('/magazines/:id', (req, res) => {
     let magazines = getMagazines()
     let magazineID = req.params.id
-    console.log(magazines)
-    console.log(magazineID)
     if(magazines.find(m => m.id == magazineID)){
         const nMagazines = magazines.filter(m => m.id != magazineID)
         fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(nMagazines))
