@@ -11,7 +11,7 @@ const getMagazines = () => {
     return require('../Magazine.json')
 }
 
-const findMagazines = (id) => getMagazines().find(m => m.id == id)
+const findMagazines = (id) => getMagazines().find(m => m.id === id)
 
 app.listen(port, () => {
     console.log('Example app listening at http://localhost:3001/')
@@ -23,7 +23,7 @@ app.get('/magazines', (req, res) =>
 
 app.get('/magazines/:id', (req, res) =>{
     const id = parseInt(req.params.id)
-    const magazine = getMagazines().find(magazine => magazine.id == id)
+    const magazine = getMagazines().find(magazine => magazine.id === id)
     if(magazine) {
         res.status(200).json(magazine)
     }
@@ -51,20 +51,17 @@ app.put('/magazines/:id', (req, res) => {
 app.post('/magazines', (req, res) => {
     let magazines = getMagazines()
     let newMagazine = req.body
-    if(magazines.find(m => m.id == newMagazine.id)){
-        res.status(400).end()
-    } else {
-        magazines.push(newMagazine)
-        fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(magazines))
-        res.status(201).send(newMagazine)
-    }
+    newMagazine.id = uuidv4()
+    magazines.push(newMagazine)
+    fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(magazines))
+    res.status(201).send(newMagazine)
 })
 
 app.delete('/magazines/:id', (req, res) => {
     let magazines = getMagazines()
     let magazineID = req.params.id
-    if(magazines.find(m => m.id == magazineID)){
-        const nMagazines = magazines.filter(m => m.id != magazineID)
+    if(magazines.find(m => m.id === magazineID)){
+        const nMagazines = magazines.filter(m => m.id !== magazineID)
         fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(nMagazines))
         res.status(204).end()
     } else {
