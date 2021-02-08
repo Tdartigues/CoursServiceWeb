@@ -1,13 +1,13 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const fs = require('fs')
 
-const books = require('../Books.json')
+app.use(express.json())
 
-//NON utilisé
-/*app.get('/', (req, res) => {
-  res.send('Hello World!')
-})*/
+const getBooks = () => require('../Books.json')
+
+const findBook = (id) => getBooks().find(m => m.id == id)
 
 app.listen(port, () => {
   console.log('Example app listening at http://localhost:3000/')
@@ -23,10 +23,17 @@ app.get('/books/:id', (req, res) =>{
    res.status(200).json(book)
 })
 
-//NON utilisé
-/*app.put('/books/:id', (req, res) =>{
-    const id = parseInt(req.params.id)
-    const book = books.find(book => book.id === id)
-    book.name = req.name
-    res.status(200).json(book)
- })*/
+app.put('/books/:id', (req, res) => {
+    const body = req.body
+    const bookID = req.params.id
+    const books = getBooks()
+    const book = findBook(bookID)
+    if (book) {
+        const newBook = body
+        books.splice(book, 1, newBook)
+        fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
+        res.send(newBook)
+    } else {
+        res.status(404).end()
+    }
+})
