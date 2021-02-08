@@ -11,18 +11,20 @@ const getBooks = () => {
     return require('../Books.json')
 }
 
-const findBook = (id) => getBooks().find(m => m.id === id)
+const findBook = (id) => getBooks().find(b => b.id === id)
 
 app.listen(port, () => {
   console.log('Example app listening at http://localhost:3000/')
 })
 
 app.get('/books', (req, res) => {
+    console.log(req.originalUrl)
     res.status(200).json(getBooks())
 })
 
 app.get('/books/:id', (req, res) =>{
-    const id = parseInt(req.params.id)
+    console.log(req.originalUrl)
+    const id = req.params.id
     const book = getBooks().find(book => book.id === id)
     if(book){
         res.status(200).json(book)
@@ -36,19 +38,20 @@ app.get('/books/:id', (req, res) =>{
 app.put('/books/:id', (req, res) => {
     const body = req.body
     const bookID = req.params.id
+    body.id = bookID
     const books = getBooks()
     const book = findBook(bookID)
     if (book) {
-        const newBook = body
-        books.splice(book, 1, newBook)
+        books.splice(body, 1, body)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
-        res.send(newBook)
+        res.send(body)
     } else {
         res.status(404).end()
     }
 })
 
 app.post('/books', (req, res) => {
+    console.log(req.originalUrl)
     let books = getBooks()
     let newBook = req.body
     newBook.id = uuidv4()
@@ -58,12 +61,29 @@ app.post('/books', (req, res) => {
 })
 
 app.delete('/books/:id', (req, res) => {
+    console.log(req.originalUrl)
     let books = getBooks()
     let bookID = req.params.id
     if(books.find(b => b.id === bookID)){
         const nBooks = books.filter(b => b.id !== bookID)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(nBooks))
         res.status(204).end()
+    } else {
+        res.status(404).end()
+    }
+})
+
+app.patch('/books/:id', (req, res) => {
+    console.log(req.originalUrl)
+    const body = req.body
+    const bookID = req.params.id
+    const books = getBooks()
+    const book = findBook(bookID)
+    if (book) {
+        const newBook = Object.assign({}, book, body)
+        books.splice(book, 1, newBook)
+        fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
+        res.send(newBook)
     } else {
         res.status(404).end()
     }
