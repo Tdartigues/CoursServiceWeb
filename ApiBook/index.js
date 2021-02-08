@@ -14,12 +14,12 @@ app.listen(port, () => {
 })
 
 app.get('/books', (req, res) => {
-    res.status(200).json(books)
+    res.status(200).json(getBooks())
 })
 
 app.get('/books/:id', (req, res) =>{
    const id = parseInt(req.params.id)
-   const book = books.find(book => book.id === id)
+   const book = getBooks().find(book => book.id === id)
    res.status(200).json(book)
 })
 

@@ -9,22 +9,17 @@ const getMagazines = () => require('../Magazine.json')
 
 const findMagazines = (id) => getMagazines().find(m => m.id == id)
 
-//NON utilisé
-/*app.get('/', (req, res) => {
-  res.send('Hello World!')
-})*/
-
 app.listen(port, () => {
     console.log('Example app listening at http://localhost:3001/')
 })
 
 app.get('/magazines', (req, res) => {
-    res.status(200).json(magazines)
+    res.status(200).json(getMagazines())
 })
 
 app.get('/magazines/:id', (req, res) =>{
     const id = parseInt(req.params.id)
-    const magazine = magazines.find(magazine => magazine.id === id)
+    const magazine = getMagazines().find(magazine => magazine.id === id)
     res.status(200).json(magazine)
 })
 
