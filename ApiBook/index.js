@@ -1,10 +1,12 @@
+const fs = require('fs')
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = 3000
-const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 
 app.use(express.json())
+app.use(cors())
 
 const getBooks = () => {
     purgeCache('../Books.json')
