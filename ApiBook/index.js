@@ -1,9 +1,18 @@
 const fs = require('fs')
 const express = require('express')
 const cors = require('cors')
+const https = require('https')
 const app = express()
 const port = 3000
 const { v4: uuidv4 } = require('uuid')
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
+
+const key = fs.readFileSync('./selfsigned.key');
+const cert = fs.readFileSync('./selfsigned.crt');
+var options = {
+    key: key,
+    cert: cert
+};
 
 app.use(express.json())
 app.use(cors())
@@ -15,9 +24,14 @@ const getBooks = () => {
 
 const findBook = (id) => getBooks().find(b => b.id === id)
 
-app.listen(port, () => {
+/*app.listen(port, () => {
   console.log('Example app listening at http://localhost:3000/')
-})
+})*/
+
+const server = https.createServer(options, app);
+server.listen(port, () => {
+    console.log("server starting on port : " + port)
+});
 
 app.get('/books', (req, res) => {
     printLog(req)

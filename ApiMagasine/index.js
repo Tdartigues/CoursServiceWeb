@@ -1,12 +1,21 @@
 const fs = require('fs')
 const express = require('express')
 const cors = require('cors')
+const https = require('https')
 const app = express()
 const port = 3001
 const { v4: uuidv4 } = require('uuid')
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 app.use(express.json())
 app.use(cors())
+
+const key = fs.readFileSync('./selfsigned.key');
+const cert = fs.readFileSync('./selfsigned.crt');
+var options = {
+    key: key,
+    cert: cert
+};
 
 const getMagazines = () => {
     purgeCache('../Magazine.json')
@@ -15,9 +24,14 @@ const getMagazines = () => {
 
 const findMagazines = (id) => getMagazines().find(m => m.id === id)
 
-app.listen(port, () => {
+/*app.listen(port, () => {
     console.log('Example app listening at http://localhost:3001/')
-})
+})*/
+
+const server = https.createServer(options, app);
+server.listen(port, () => {
+    console.log("server starting on port : " + port)
+});
 
 app.get('/magazines', (req, res) => {
     printLog(req)
