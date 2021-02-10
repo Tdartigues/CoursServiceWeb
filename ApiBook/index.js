@@ -20,12 +20,12 @@ app.listen(port, () => {
 })
 
 app.get('/books', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     res.status(200).json(getBooks())
 })
 
 app.get('/books/:id', (req, res) =>{
-    console.log(req.originalUrl)
+    printLog(req)
     const id = req.params.id
     const book = getBooks().find(book => book.id === id)
     if(book){
@@ -38,13 +38,15 @@ app.get('/books/:id', (req, res) =>{
 })
 
 app.put('/books/:id', (req, res) => {
+    printLog(req)
     const body = req.body
     const bookID = req.params.id
     body.id = bookID
     const books = getBooks()
     const book = findBook(bookID)
     if (book) {
-        books.splice(body, 1, body)
+        const bookIdx = books.findIndex(b => b.id === bookID)
+        books.splice(bookIdx, 1, body)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
         res.send(body)
     } else {
@@ -53,7 +55,7 @@ app.put('/books/:id', (req, res) => {
 })
 
 app.post('/books', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     let books = getBooks()
     let newBook = req.body
     newBook.id = uuidv4()
@@ -63,7 +65,7 @@ app.post('/books', (req, res) => {
 })
 
 app.delete('/books/:id', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     let books = getBooks()
     let bookID = req.params.id
     if(books.find(b => b.id === bookID)){
@@ -76,20 +78,28 @@ app.delete('/books/:id', (req, res) => {
 })
 
 app.patch('/books/:id', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     const body = req.body
     const bookID = req.params.id
     const books = getBooks()
     const book = findBook(bookID)
     if (book) {
         const newBook = Object.assign({}, book, body)
-        books.splice(book, 1, newBook)
+        const bookIdx = books.findIndex(b => b.id === bookID)
+        books.splice(bookIdx, 1, newBook)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
         res.send(newBook)
     } else {
         res.status(404).end()
     }
 })
+
+function printLog(req) {
+    console.log("new Requete")
+    console.log("  " + req.method + req.originalUrl) //La requete (methode + route)
+    console.log("  " + req.headers['x-forwarded-for'] || req.socket.remoteAddress) //l'adresse ip de l'émeteur
+    console.log("End Requete ")
+}
 
 /**
  * Removes a module from the cache
