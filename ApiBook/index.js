@@ -56,8 +56,8 @@ app.put('/books/:id', (req, res) => {
 
 app.post('/books', (req, res) => {
     printLog(req)
-    let books = getBooks()
-    let newBook = req.body
+    const books = getBooks()
+    const newBook = req.body
     newBook.id = uuidv4()
     books.push(newBook)
     fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(books))
@@ -66,8 +66,8 @@ app.post('/books', (req, res) => {
 
 app.delete('/books/:id', (req, res) => {
     printLog(req)
-    let books = getBooks()
-    let bookID = req.params.id
+    const books = getBooks()
+    const bookID = req.params.id
     if(books.find(b => b.id === bookID)){
         const nBooks = books.filter(b => b.id !== bookID)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(nBooks))

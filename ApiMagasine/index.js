@@ -20,12 +20,12 @@ app.listen(port, () => {
 })
 
 app.get('/magazines', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     res.status(200).json(getMagazines())
 })
 
 app.get('/magazines/:id', (req, res) =>{
-    console.log(req.originalUrl)
+    printLog(req)
     const id = req.params.id
     const magazine = getMagazines().find(magazine => magazine.id === id)
     if(magazine) {
@@ -34,18 +34,18 @@ app.get('/magazines/:id', (req, res) =>{
     else {
         res.status(404).end()
     }
-
 })
 
 app.put('/magazines/:id', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     const body = req.body
     const magazineID = req.params.id
     body.id = magazineID
     const magazines = getMagazines()
     const magazine = findMagazines(magazineID)
     if (magazine) {
-        magazines.splice(magazine, 1, body)
+        const magazineIdx = magazines.findIndex(m => m.id === magazineID)
+        magazines.splice(magazineIdx, 1, body)
         fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(magazines))
         res.send(body)
     } else {
@@ -54,9 +54,9 @@ app.put('/magazines/:id', (req, res) => {
 })
 
 app.post('/magazines', (req, res) => {
-    console.log(req.originalUrl)
-    let magazines = getMagazines()
-    let newMagazine = req.body
+    printLog(req)
+    const magazines = getMagazines()
+    const newMagazine = req.body
     newMagazine.id = uuidv4()
     magazines.push(newMagazine)
     fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(magazines))
@@ -64,7 +64,7 @@ app.post('/magazines', (req, res) => {
 })
 
 app.delete('/magazines/:id', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     let magazines = getMagazines()
     let magazineID = req.params.id
     if(magazines.find(m => m.id === magazineID)){
@@ -77,20 +77,28 @@ app.delete('/magazines/:id', (req, res) => {
 })
 
 app.patch('/magazines/:id', (req, res) => {
-    console.log(req.originalUrl)
+    printLog(req)
     const body = req.body
     const magazineID = req.params.id
     const magazines = getMagazines()
     const magazine = findMagazines(magazineID)
     if (magazine) {
         const newMagazine = Object.assign({}, magazine, body)
-        magazines.splice(magazine, 1, newMagazine)
+        const magazineIdx = magazines.findIndex(m => m.id === magazineID)
+        magazines.splice(magazineIdx, 1, newMagazine)
         fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(magazines))
         res.send(newMagazine)
     } else {
         res.status(404).end()
     }
 })
+
+function printLog(req) {
+    console.log("New Requete")
+    console.log("  " + req.method + req.originalUrl) //La requete (methode + route)
+    console.log("  " + req.headers['x-forwarded-for'] || req.socket.remoteAddress) //l'adresse ip de l'émeteur
+    console.log("End Requete")
+}
 
 /**
  * Removes a module from the cache
