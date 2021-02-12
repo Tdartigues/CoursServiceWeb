@@ -5,7 +5,6 @@ const https = require('https')
 const app = express()
 const port = 3000
 const { v4: uuidv4 } = require('uuid')
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
 const key = fs.readFileSync('./selfsigned.key');
 const cert = fs.readFileSync('./selfsigned.crt');
@@ -48,7 +47,6 @@ app.get('/books/:id', (req, res) =>{
     else {
         res.status(404).end()
     }
-
 })
 
 app.put('/books/:id', (req, res) => {

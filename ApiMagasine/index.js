@@ -5,10 +5,6 @@ const https = require('https')
 const app = express()
 const port = 3001
 const { v4: uuidv4 } = require('uuid')
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
-
-app.use(express.json())
-app.use(cors())
 
 const key = fs.readFileSync('./selfsigned.key');
 const cert = fs.readFileSync('./selfsigned.crt');
@@ -16,6 +12,9 @@ var options = {
     key: key,
     cert: cert
 };
+
+app.use(express.json())
+app.use(cors())
 
 const getMagazines = () => {
     purgeCache('../Magazine.json')
@@ -79,8 +78,8 @@ app.post('/magazines', (req, res) => {
 
 app.delete('/magazines/:id', (req, res) => {
     printLog(req)
-    let magazines = getMagazines()
-    let magazineID = req.params.id
+    const magazines = getMagazines()
+    const magazineID = req.params.id
     if(magazines.find(m => m.id === magazineID)){
         const nMagazines = magazines.filter(m => m.id !== magazineID)
         fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(nMagazines))
