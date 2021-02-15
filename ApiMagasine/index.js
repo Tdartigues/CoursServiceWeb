@@ -99,7 +99,7 @@ app.patch('/magazines/:id', (req, res) => {
         const newMagazine = Object.assign({}, magazine, body)
         const magazineIdx = magazines.findIndex(m => m.id === magazineID)
         magazines.splice(magazineIdx, 1, newMagazine)
-        fs.writeFileSync(__dirname + '\\..\\Books.json', JSON.stringify(magazines))
+        fs.writeFileSync(__dirname + '\\..\\Magazine.json', JSON.stringify(magazines))
         res.send(newMagazine)
     } else {
         res.status(404).end()
