@@ -23,14 +23,14 @@ const getBooks = () => {
 
 const findBook = (id) => getBooks().find(b => b.id === id)
 
-/*app.listen(port, () => {
+app.listen(port, () => {
   console.log('Example app listening at http://localhost:3000/')
-})*/
+})
 
-const server = https.createServer(options, app);
+/*const server = https.createServer(options, app);
 server.listen(port, () => {
     console.log("server starting on port : " + port)
-});
+});*/
 
 app.get('/books', (req, res) => {
     printLog(req)

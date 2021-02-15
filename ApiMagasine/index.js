@@ -23,14 +23,14 @@ const getMagazines = () => {
 
 const findMagazines = (id) => getMagazines().find(m => m.id === id)
 
-/*app.listen(port, () => {
+app.listen(port, () => {
     console.log('Example app listening at http://localhost:3001/')
-})*/
+})
 
-const server = https.createServer(options, app);
+/*const server = https.createServer(options, app);
 server.listen(port, () => {
     console.log("server starting on port : " + port)
-});
+});*/
 
 app.get('/magazines', (req, res) => {
     printLog(req)
