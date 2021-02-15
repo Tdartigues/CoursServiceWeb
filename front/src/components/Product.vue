@@ -33,10 +33,12 @@
 <script>
 import StarRating from "vue-star-rating"
 import axios from "axios";
-const apiURL = "https://92.92.23.194:3000/books"
+const apiURLBook = "http://localhost:3000/books"
+const apiURLMagazine = "http://localhost:3001/magazines"
+let apiURLProduct = ""
 export default {
   name: "Product",
-  props : ["obj"],
+  props : ["obj","src"],
   components: {StarRating},
   data() {
     return {
@@ -48,16 +50,26 @@ export default {
   },
   created: function() {
     this.product = this.obj;
+    switch (this.src) {
+      case "mag" :
+        apiURLProduct = apiURLMagazine;
+        console.log(apiURLProduct);
+        break;
+      case "book" :
+        apiURLProduct = apiURLBook;
+        console.log(apiURLProduct);
+        break;
+    }
   },
   methods: {
     requestCommande: function (){
       try {
-        axios.get(apiURL + "/" + this.product.id)
+        axios.get(apiURLProduct + "/" + this.product.id)
             .then(res => {
               this.product = (res.data)
               if(this.product.stock >= this.comande) {
                 this.error = false
-                axios.patch(apiURL + "/" + this.product.id,
+                axios.patch(apiURLProduct + "/" + this.product.id,
                     {stock: this.product.stock - this.comande})
                     .then(res => {
                       this.product = (res.data)

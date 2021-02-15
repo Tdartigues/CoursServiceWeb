@@ -7,7 +7,7 @@
         </div>
         <div class="col-lg-9">
           <div class="row">
-            <Product v-for="book in this.json" :key="book.id" :obj="book"></Product>
+            <Product v-for="book in this.json" :key="book.id" :obj="book" src="book"></Product>
           </div>
         </div>
       </div>
