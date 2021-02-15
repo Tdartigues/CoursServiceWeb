@@ -1,41 +1,32 @@
 {
-    "title": "Shop Homepage",
-    "name": "startbootstrap-shop-homepage",
-    "version": "4.2.3",
-    "scripts": {
-        "start": "node_modules/.bin/gulp watch"
-    },
-    "description": "A shop homepage HTML template built with Bootstrap",
-    "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template"
-    ],
-    "homepage": "https://startbootstrap.com/template/shop-homepage",
-    "bugs": {
-        "url": "https://github.com/StartBootstrap/startbootstrap-shop-homepage/issues",
-        "email": "feedback@startbootstrap.com"
-    },
-    "license": "MIT",
-    "author": "Start Bootstrap",
-    "contributors": [
-        "David Miller (https://davidmiller.io/)"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/StartBootstrap/startbootstrap-shop-homepage.git"
-    },
-    "dependencies": {
-        "bootstrap": "4.5.3",
-        "jquery": "3.5.1"
-    },
-    "devDependencies": {
-        "browser-sync": "2.26.13",
-        "del": "6.0.0",
-        "gulp": "4.0.2",
-        "merge-stream": "2.0.0"
-    }
+  "name": "vue-app-2",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "core-js": "^3.6.5",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
+    "register-service-worker": "^1.7.1",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vue-star-rating": "^1.7.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-pwa": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
